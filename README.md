@@ -135,23 +135,7 @@ This loads:
       Type in the memory search panel → matching cards highlight immediately.
 
 ---
-🛠 Troubleshooting
 
-❌ Command not found in VS Code
-    Restart VS Code after installing .vsix.
-    
-❌ Backend not responding
-    Ensure the backend is running:
-    ```bash
-    node backend/sync.js```
-    
-❌ UI not updating
-    Confirm the project folder is opened as the root workspace.
-    
-❌ First run is slow
-    This is normal — the embedding model loads on startup.  
-
----
 📌 Quick Summary
 
 Install dependencies:
