@@ -1,0 +1,23 @@
+
+---
+
+# ✅ **requirements.txt**
+
+```txt
+# Story Sync Prototype - Requirements
+
+# Runtime:
+Node.js >= 18
+npm >= 8
+
+# VS Code Extension Packaging:
+@vscode/vsce
+
+# Backend Node Dependencies:
+express
+body-parser
+chokidar
+@xenova/transformers
+
+# (Optional) Editor:
+Visual Studio Code >= 1.70

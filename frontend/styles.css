@@ -1,0 +1,109 @@
+/* frontend/styles.css - Notion-like minimal white theme */
+:root{
+  --bg: #f7f7f8;
+  --panel: #ffffff;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --border: #e6e6e9;
+  --cardBg: #ffffff;
+  --cardShadow: rgba(16,24,40,0.06);
+}
+
+*{box-sizing:border-box;font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+body{margin:0;background:var(--bg);color:#111827;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border);background:var(--panel);}
+.topbar h1{margin:0;font-size:16px;font-weight:700;}
+.controls{display:flex;gap:10px;align-items:center;}
+button{background:var(--accent);color:white;border:none;padding:8px 10px;border-radius:8px;font-weight:600;cursor:pointer;}
+#saveStatus{font-size:13px;color:var(--muted);margin-left:8px;}
+
+.container{display:flex;gap:16px;padding:18px;}
+
+/* ⬇️ UPDATED: Adaptive grid + scrollable card area */
+.cards-column{
+  flex:1;
+
+  /* NEW: adaptive card grid */
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+  gap:16px;
+
+  /* NEW: scrollable area */
+  max-height: calc(100vh - 120px);
+  overflow-y:auto;
+  padding-right:8px;
+}
+
+/* NEW: smooth scrollbar */
+.cards-column::-webkit-scrollbar{
+  width:8px;
+}
+.cards-column::-webkit-scrollbar-thumb{
+  background:#d1d5db;
+  border-radius:4px;
+}
+
+.right-panel{width:360px;display:flex;flex-direction:column;gap:12px;padding:12px;background:transparent;}
+
+/* ⬇️ UPDATED: smaller cards to fit grid */
+.card{
+  background:var(--cardBg);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:12px;
+  box-shadow:0 6px 18px var(--cardShadow);
+
+  /* small tightening */
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.cardHeader{display:flex;justify-content:space-between;gap:8px;align-items:center;}
+
+.cardTitle{
+  font-weight:700;
+  border:none;
+  font-size:15px;
+
+  /* smaller title padding */
+  padding:4px;
+  border-radius:6px;
+  background:transparent;
+  width:60%;
+}
+
+.cardControls{display:flex;gap:8px;align-items:center;}
+.cardType{padding:6px;border-radius:6px;border:1px solid var(--border);background:transparent;}
+.collapseBtn{border:none;background:transparent;cursor:pointer;font-size:14px;color:var(--muted);}
+
+.cardBody{display:block;}
+
+/* ⬇️ UPDATED: slightly smaller textarea */
+.cardContent{
+  width:100%;
+  min-height:80px;
+  padding:8px;
+  border:1px solid var(--border);
+  border-radius:6px;
+  resize:vertical;
+  font-size:14px;
+  background:transparent;
+}
+
+.tagRow{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.tag{background:#eef2ff;color:#1e3a8a;padding:4px 8px;border-radius:999px;font-size:12px;}
+
+.cardActions{display:flex;gap:8px;margin-top:8px;justify-content:flex-end;}
+.right-panel textarea{width:100%;height:220px;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--panel);resize:vertical;}
+
+#memResults{max-height:180px;overflow:auto;border:1px dashed var(--border);padding:8px;border-radius:8px;background:#fff;}
+.mem-item{padding:6px 0;color:var(--muted);font-size:13px;border-bottom:1px solid #f3f4f6;}
+
+.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);}
+.modal.hidden{display:none;}
+.modal-content{background:var(--panel);padding:18px;border-radius:8px;width:90%;max-width:880px;box-shadow:0 20px 40px rgba(2,6,23,0.2);}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
+.conflict-card{border:1px solid var(--border);padding:10px;border-radius:6px;margin-top:8px;background:#fff;}
+.small-muted{font-size:13px;color:var(--muted);margin-top:6px;}

@@ -1,0 +1,75 @@
+<!-- frontend/index.html -->
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Chimera UI — Cards (Notion-like)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>Chimera UI — Cards</h1>
+    <div class="controls">
+      <button id="newCardBtn">+ New Card</button>
+      <button id="refreshBtn">Refresh</button>
+      <span id="saveStatus">idle</span>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="cardsColumn" class="cards-column" aria-label="Cards list"></section>
+
+    <aside id="rightPanel" class="right-panel">
+      <h3>Story (plain)</h3>
+      <textarea id="storyText" placeholder="Full story (plain paragraphs)"></textarea>
+      <div class="panel-actions">
+        <button id="applyStory">Apply story -> cards</button>
+      </div>
+
+      <h3>Memory search</h3>
+      <input id="searchMem" placeholder="Search memory..." />
+      <div id="memResults"></div>
+    </aside>
+  </main>
+
+  <!-- conflict modal -->
+  <div id="conflictModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2>Conflict detected</h2>
+      <p>Select which version to keep for each conflicted card, or merge manually.</p>
+      <div id="conflictList"></div>
+      <div class="modal-actions">
+        <button id="applyConflicts">Apply chosen resolutions</button>
+        <button id="dismissConflicts">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <template id="cardTpl">
+    <article class="card" draggable="true">
+      <div class="cardHeader">
+        <input class="cardTitle" placeholder="Title" />
+        <div class="cardControls">
+          <select class="cardType">
+            <option>scene</option>
+            <option>character</option>
+            <option>note</option>
+          </select>
+          <button class="collapseBtn">▾</button>
+        </div>
+      </div>
+      <div class="cardBody">
+        <textarea class="cardContent" placeholder="Write details..."></textarea>
+        <div class="tagRow"></div>
+        <div class="cardActions">
+          <button class="addTag">+ tag</button>
+          <button class="deleteCard">Delete</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="cards.js"></script>
+</body>
+</html>

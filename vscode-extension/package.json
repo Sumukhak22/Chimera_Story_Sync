@@ -1,0 +1,40 @@
+{
+  "name": "story-sync-prototype",
+  "displayName": "Story Sync (Prototype)",
+  "description": "A tiny extension that notifies the local backend on file changes (live sync demo).",
+  "version": "0.0.1",
+  "engines": { "vscode": "^1.70.0" },
+
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:storySync.openUI",
+    "onCommand:storySync.syncNow",
+    "onCommand:storySync.ping"
+  ],
+
+  "main": "./extension.js",
+  "publisher": "your-name",
+  "categories": ["Other"],
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sumukhak22/Chimera"
+  },
+
+  "contributes": {
+    "commands": [
+      {
+        "command": "storySync.openUI",
+        "title": "Open Story Sync UI"
+      },
+      {
+        "command": "storySync.syncNow",
+        "title": "Force Sync Now"
+      },
+      {
+        "command": "storySync.ping",
+        "title": "Ping Backend"
+      }
+    ]
+  }
+}
