@@ -13,7 +13,7 @@
   ],
 
   "main": "./extension.js",
-  "publisher": "your-name",
+  "publisher": "Chimera",
   "categories": ["Other"],
 
   "repository": {

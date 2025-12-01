@@ -371,7 +371,7 @@ function updateNewCardBtnState(count) {
   }
 }
 
-/* ---------- Mindmap view ---------- */
+/* ---------- Mindmap view (numbered hierarchy) ---------- */
 
 function buildMindmapView(cards) {
   const root = document.getElementById('mindmapView');
@@ -387,62 +387,120 @@ function buildMindmapView(cards) {
     return;
   }
 
+  // Helper: extract numbering from title → "1.2.1"
+  function getNumbering(title) {
+    if (!title) return null;
+    const match = title.trim().match(/^(\d+(?:\.\d+)*)\b/);
+    return match ? match[1] : null;
+  }
+
+  // Build structure tree
+  const tree = [];
+  const stack = [];
+
+  scenes.forEach(scene => {
+    const num = getNumbering(scene.title || '');
+    const node = {
+      scene,
+      number: num,
+      children: []
+    };
+
+    if (!num) {
+      // No numbering → treat as top-level
+      tree.push(node);
+      return;
+    }
+
+    const level = num.split('.').length;
+
+    // Maintain a stack of last nodes per level
+    while (stack.length >= level) {
+      stack.pop();
+    }
+
+    if (stack.length === 0) {
+      // Top-level number (e.g., "1", "2")
+      tree.push(node);
+    } else {
+      // Child node (e.g., "1.1", "1.2.3")
+      stack[stack.length - 1].children.push(node);
+    }
+
+    stack.push(node);
+  });
+
+  // Render tree recursively
+  function renderNodes(nodes, parentEl) {
+    const ul = document.createElement('ul');
+    ul.className = 'mm-list';
+
+    nodes.forEach(n => {
+      const li = document.createElement('li');
+      li.className = 'mm-node';
+
+      const label = document.createElement('div');
+      label.className = 'mm-node-label';
+
+      // Display numbering
+      const idxSpan = document.createElement('span');
+      idxSpan.className = 'mm-scene-index';
+      idxSpan.textContent = n.number || '';
+
+      const titleSpan = document.createElement('span');
+      titleSpan.className = 'mm-node-title';
+      titleSpan.textContent = n.scene.title || '(untitled scene)';
+
+      label.appendChild(idxSpan);
+      label.appendChild(titleSpan);
+
+      // Optional pill for tags
+      if (n.scene.tags && n.scene.tags.length) {
+        const pill = document.createElement('span');
+        pill.className = 'mm-node-pill';
+        pill.textContent = n.scene.tags.join(', ');
+        label.appendChild(pill);
+      }
+
+      // Add collapse toggle only if children exist
+      let toggle = null;
+      if (n.children.length > 0) {
+        toggle = document.createElement('span');
+        toggle.className = 'mm-toggle';
+        toggle.textContent = '▾';
+        label.appendChild(toggle);
+
+        label.addEventListener('click', () => {
+          li.classList.toggle('mm-collapsed');
+          toggle.textContent = li.classList.contains('mm-collapsed') ? '▸' : '▾';
+        });
+      }
+
+      li.appendChild(label);
+
+      if (n.children.length > 0) {
+        const childContainer = document.createElement('div');
+        childContainer.className = 'mm-children';
+        renderNodes(n.children, childContainer);
+        li.appendChild(childContainer);
+      }
+
+      ul.appendChild(li);
+    });
+
+    parentEl.appendChild(ul);
+  }
+
+  // Root rendering
   const wrapper = document.createElement('div');
   wrapper.className = 'mm-root';
 
   const title = document.createElement('div');
   title.className = 'mm-root-title';
   title.textContent = 'Story';
+
   wrapper.appendChild(title);
-
-  const ul = document.createElement('ul');
-  ul.className = 'mm-list';
-
-  scenes.forEach((scene, idx) => {
-    const li = document.createElement('li');
-    li.className = 'mm-node';
-
-    const label = document.createElement('div');
-    label.className = 'mm-node-label';
-
-    const idxSpan = document.createElement('span');
-    idxSpan.className = 'mm-scene-index';
-    idxSpan.textContent = String(idx + 1).padStart(2, '0');
-
-    const titleSpan = document.createElement('span');
-    titleSpan.className = 'mm-node-title';
-    titleSpan.textContent = scene.title || '(untitled scene)';
-
-    const pill = document.createElement('span');
-    pill.className = 'mm-node-pill';
-    pill.textContent = (scene.tags && scene.tags.length)
-      ? scene.tags.join(', ')
-      : 'scene';
-
-    label.appendChild(idxSpan);
-    label.appendChild(titleSpan);
-    label.appendChild(pill);
-
-    const children = document.createElement('div');
-    children.className = 'mm-children';
-
-    const toggle = document.createElement('span');
-    toggle.className = 'mm-toggle';
-    toggle.textContent = '▾';
-
-    label.addEventListener('click', () => {
-      li.classList.toggle('mm-collapsed');
-      toggle.textContent = li.classList.contains('mm-collapsed') ? '▸' : '▾';
-    });
-
-    label.appendChild(toggle);
-
-    li.appendChild(label);
-    li.appendChild(children);
-    ul.appendChild(li);
-  });
-
-  wrapper.appendChild(ul);
+  renderNodes(tree, wrapper);
   root.appendChild(wrapper);
 }
 
